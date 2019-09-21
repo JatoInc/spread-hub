@@ -1,6 +1,7 @@
 require('dotenv').config();
 const http = require('http');
 const Koa = require('koa');
+const cors = require('@koa/cors');
 const helloWorldRoutes = require('./routes/public/helloworld');
 // const koajwt = require('koa-jwt');
 // const { loadRoutes } = require('./routesLoader');
@@ -10,6 +11,7 @@ const app = new Koa();
 
 http.createServer(app.callback());
 
+app.use(cors());
 app.use(bodyParser());
 app.use(helloWorldRoutes.routes());
 // loadRoutes(app, 'publics');

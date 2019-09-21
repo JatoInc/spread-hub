@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/JatoInc/spread-hub#readme",
   "dependencies": {
+    "@koa/cors": "^3.0.0",
     "dotenv": "^8.1.0",
     "koa": "^2.8.1",
     "koa-bodyparser": "^4.2.1",
