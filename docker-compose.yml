@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  api_gateway:
+  spread_hub:
     image: spread-hub:latest
     ports:
       - 4000:4000      
