@@ -4,9 +4,12 @@ const mongooseDelete = require('mongoose-delete');
 
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     access_level: [{ type: Number, default: 0, enum: [0, 1, 2] }],
     password: { type: String, required: true }
+},
+{
+  timestamps: true
 });
 
 schema.plugin(mongooseDelete, { overrideMethods: true });
