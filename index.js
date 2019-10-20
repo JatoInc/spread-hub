@@ -1,22 +1,30 @@
 require('dotenv').config();
+const Database = require('./shared/spread-hub-context');
 const http = require('http');
 const Koa = require('koa');
-const cors = require('@koa/cors');
-const helloWorldRoutes = require('./routes/public/helloworld');
-// const koajwt = require('koa-jwt');
-// const { loadRoutes } = require('./routesLoader');
+const morgan = require('koa-morgan');
 const bodyParser = require('koa-bodyparser');
+const cors = require('@koa/cors');
+// const koajwt = require('koa-jwt');
+// const routesLoader = require('./routes-loader');
 
-const app = new Koa();
 
-http.createServer(app.callback());
+(async () => {
+    const app = new Koa();
+    app.use(bodyParser());
+    await Database.connect();
+    const loginRoute = require('./routes/public/login.route');
+    const professorRoute = require('./routes/private/professors.route');
 
-app.use(cors());
-app.use(bodyParser());
-app.use(helloWorldRoutes.routes());
-// loadRoutes(app, 'publics');
-// app.use(koajwt({}));
-// loadRoutes(app, 'privates');
-
-app.listen(process.env.PORT || 4000);
-console.log('Server listening on port 4000');
+    http.createServer(app.callback());
+    app.use(morgan('dev'));
+    app.use(loginRoute.routes())
+    app.use(professorRoute.routes())
+    // app.use(routesLoader(app, 'public'));
+    // app.use(koajwt({}));
+    // app.use(routesLoader(app, 'private'));
+    
+    app.use(cors());
+    app.listen(process.env.PORT || 4000);
+    console.log('Server listening on port 4000');
+})()

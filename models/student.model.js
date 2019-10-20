@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     register: { type: String, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     course: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Course' },
-    responsible: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
+    responsible: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }]
 });
 
 schema.plugin(mongooseDelete, { overrideMethods: true });

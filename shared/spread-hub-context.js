@@ -15,7 +15,7 @@ class SpreadHubContext {
     }
 
     static connect() {
-        const cs = process.env.MONGO_PORTAL;        
+        const cs = process.env.MONGO_PORTAL;
         SpreadHubContext.connection = Mongoose.createConnection(cs, mongoConfig);
     }
 }
