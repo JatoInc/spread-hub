@@ -4,6 +4,7 @@ const http = require('http');
 const Koa = require('koa');
 const morgan = require('koa-morgan');
 const cors = require('@koa/cors');
+const bodyParser = require('koa-bodyparser');
 // const koajwt = require('koa-jwt');
 // const routesLoader = require('./routes-loader');
 
