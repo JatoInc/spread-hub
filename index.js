@@ -3,7 +3,6 @@ const Database = require('./shared/spread-hub-context');
 const http = require('http');
 const Koa = require('koa');
 const morgan = require('koa-morgan');
-const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
 // const koajwt = require('koa-jwt');
 // const routesLoader = require('./routes-loader');
@@ -17,6 +16,7 @@ const cors = require('@koa/cors');
     const professorRoute = require('./routes/private/professors.route');
 
     http.createServer(app.callback());
+    app.use(cors());
     app.use(morgan('dev'));
     app.use(loginRoute.routes())
     app.use(professorRoute.routes())
@@ -24,7 +24,6 @@ const cors = require('@koa/cors');
     // app.use(koajwt({}));
     // app.use(routesLoader(app, 'private'));
     
-    app.use(cors());
     app.listen(process.env.PORT || 4000);
     console.log('Server listening on port 4000');
 })()
