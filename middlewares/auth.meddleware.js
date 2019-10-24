@@ -1,9 +1,25 @@
 const jwt = require('jsonwebtoken');
 
-const authenticate = (ctx, next, level) => {
+const authenticate = (ctx, next, level) => {    
+    if (!ctx.headers.authorization) {
+        ctx.status = 401;
+        return ctx.body = {
+            error: true,
+            message: 'User is not authenticated'
+        }
+    }
+
+    if (ctx.headers.authorization && !ctx.headers.authorization.match(/Bearer \w*/)) {
+        ctx.status = 401;
+        return ctx.body = {
+            error: true,
+            message: 'Invalid authentication, expected format: "Bearer <Token>"'
+        }
+    }
+
     const [, token] = ctx.headers.authorization.split(' ');
     const data = jwt.decode(token);
-    if(data.access <= level) {
+    if (data.access <= level) {
         return next()
     }
     ctx.status = 401
@@ -13,7 +29,6 @@ const authenticate = (ctx, next, level) => {
     }
 }
 class Auth {
-
     atLeastStudent(ctx, next) {
         return authenticate(ctx, next, 3);
     }
