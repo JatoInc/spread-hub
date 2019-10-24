@@ -1,7 +1,8 @@
 const { onSuccess, onError, onCreated } = require('../shared/helpers/finalize-request/index')
 const ProfessorService = require('../services/professor.service');
 const UserService = require('../services/users.service');
-const { ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 class Controler {
 
@@ -41,11 +42,16 @@ class Controler {
 
     async create(ctx) {
         try {
-            const { details, user } = ctx.request.body
+            const { body } = ctx.request;
+            const user = { ...body.user }
+            delete body.user;
+
+            user.password = bcrypt.hashSync(user.password, 10);
 
             const createdUser = await UserService.create({ ...user, access_level: 1 });
-
-            const created = await ProfessorService.create({ ...details, user: createdUser._id });
+            
+            body.subject = body.subject.map(s => s = ObjectId(s));
+            const created = await ProfessorService.create({ ...body, user: createdUser._id });
             onCreated(ctx, created);
         } catch (err) {
             console.log('err :', err);

@@ -73,22 +73,12 @@ class Controler {
         try {
             const { id } = ctx.params;
             const { body } = ctx.request;
+
             const student = await StudentService.getById(ObjectID(id));
             
             const user = { ...body.user };
+            
             delete body.user;
-            // const userPayload = {
-            //     name: ctx.request.body.name,
-            //     email: ctx.request.body.email,
-            //     address: ctx.request.body.address,
-            //     phone: ctx.request.body.phone,
-            //     access_level: 3
-            // }
-
-            // const studentPayload = {
-            //     register: ctx.request.body.register,
-            //     course: ObjectID(ctx.request.body.course)
-            // }
 
             await UserService.updateOne(ObjectID(student.user._id), user);
             await StudentService.updateOne(ObjectID(id), body);
