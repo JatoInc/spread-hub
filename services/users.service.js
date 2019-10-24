@@ -1,20 +1,21 @@
 const { User } = require('../models/user.model');
-
+const bcrypt = require('bcrypt');
 
 class Service {
-  getbyId(id, projection, options) {
+  getById(id, projection, options) {
     return User.findOne({ _id: id }, projection, options);
   }
-  
+
   findOne(conditions, projection, options) {
     return User.findOne(conditions, projection, options);
   }
 
   find(conditions, projection, options) {
-    return User.find(conditions, projection, options)
+    return User.find(conditions, projection, options);
   }
 
   create(user) {
+    user.password = bcrypt.hashSync(user.password, 10);
     return User.create(user);
   }
 
