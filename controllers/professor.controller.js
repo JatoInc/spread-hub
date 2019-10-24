@@ -56,8 +56,7 @@ class Controler {
     async updateOne(ctx) {
         try {
             const { id } = ctx.params;
-            const { body } = ctx;
-            await ProfessorService.updateOne(ObjectId(id), body);
+            await ProfessorService.updateOne(ObjectId(id), ctx.request.body);
             ctx.status = 204;
         } catch (err) {
             onError(ctx, err);

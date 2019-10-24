@@ -72,23 +72,21 @@ class Controler {
     async updateOne(ctx) {
         try {
             const { id } = ctx.params;
-
+            const student = await StudentService.getById(ObjectID(id));
             const userPayload = {
                 name: ctx.request.body.name,
                 email: ctx.request.body.email,
                 address: ctx.request.body.address,
-                password: bcrypt.hashSync(ctx.request.body.password, 10),
                 phone: ctx.request.body.phone,
                 access_level: 3
             }
 
             const studentPayload = {
-                user: createdUser._id,
                 register: ctx.request.body.register,
                 course: ObjectID(ctx.request.body.course)
             }
 
-            await UserService.create(userPayload);
+            await UserService.updateOne(ObjectID(student.user._id), userPayload);
             await StudentService.updateOne(ObjectID(id), studentPayload);
             ctx.status = 204;
         } catch (err) {
