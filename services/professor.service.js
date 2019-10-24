@@ -10,7 +10,7 @@ class Service {
   }
 
   find(conditons, projection, options) {
-    return Professor.find(conditons, projection, options)
+    return Professor.find(conditons, projection, options);
   }
 
   create(professor) {
