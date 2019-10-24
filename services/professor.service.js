@@ -5,11 +5,19 @@ class Service {
     return Professor.findOne(conditons, projection, options);
   }
 
-  getById(id, projection, options) {
+  getById(id, projection, options, populate) {
+    if (populate) {
+      return Professor.findOne({ _id: id }, projection, options)
+        .populate(['subject', 'user']);
+    }
     return Professor.findOne({ _id: id }, projection, options);
   }
 
-  find(conditons, projection, options) {
+  find(conditons, projection, options, populate) {
+    if (populate) {
+      return Professor.find(conditons, projection, options)
+        .populate(['subject', 'user']);
+    }
     return Professor.find(conditons, projection, options);
   }
 

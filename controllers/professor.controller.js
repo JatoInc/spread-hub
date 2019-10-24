@@ -7,10 +7,17 @@ class Controler {
 
     async list(ctx) {
         try {
+            if (ctx.query._fields) {
+                ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
+            }
+
+            const populate = ctx.query._full && ctx.query._full == 'true';
+
             const query = {};
-            const result = await ProfessorService.find(query);
+            const result = await ProfessorService.find(query, ctx.query._fields, {}, populate);
             onSuccess(ctx, result);
         } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }
@@ -18,9 +25,16 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            const result = await ProfessorService.getById(ObjectId(id));
+
+            if (ctx.query._fields) {
+                ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
+            }
+
+            const populate = ctx.query._full && ctx.query._full == 'true';
+            const result = await ProfessorService.getById(ObjectId(id), ctx.query._fields, {}, populate);
             onSuccess(ctx, result);
         } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }

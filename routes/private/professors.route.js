@@ -11,5 +11,6 @@ route.get('/:id', controler.getById);
 route.post('/', controler.create);
 route.put('/', controler.updateMany);
 route.put('/:id', controler.updateOne);
+route.delete('/:id', controler.delete);
 
 module.exports = route;
