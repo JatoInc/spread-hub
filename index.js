@@ -5,10 +5,7 @@ const Koa = require('koa');
 const morgan = require('koa-morgan');
 const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
-const auth = require('./middlewares/auth.meddleware');
-// const koajwt = require('koa-jwt');
 const routesLoader = require('./routes-loader');
-
 
 (async () => {
     const app = new Koa();
