@@ -8,7 +8,7 @@ class Controler {
 
     async list(ctx) {
         try {
-            if(ctx.query._fields) {
+            if (ctx.query._fields) {
                 ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
             }
 
@@ -53,7 +53,7 @@ class Controler {
             onCreated(ctx, created);
         } catch (err) {
             console.log(err);
-            
+
             onError(ctx, err);
         }
     }
@@ -82,8 +82,13 @@ class Controler {
     async delete(ctx) {
         try {
             const { id } = ctx.params;
-            const deleted = await StudentService.deleteOne(ObjectID(id));
+            console.log(id);
+            const student = await StudentService.getById(id);
+            await UserService.deleteOne(student.user);
+            await StudentService.deleteOne(ObjectID(id));
+            ctx.status = 204;
         } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }

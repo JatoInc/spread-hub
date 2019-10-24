@@ -43,7 +43,8 @@ class Controler {
         try {
             const { id } = ctx.params;
             const { body } = ctx;
-            const updated = await ProfessorService.updateOne(ObjectId(id), body);
+            await ProfessorService.updateOne(ObjectId(id), body);
+            ctx.status = 204;
         } catch (err) {
             onError(ctx, err);
         }
@@ -52,7 +53,8 @@ class Controler {
     async updateMany(ctx) {
         try {
             const { query, body } = ctx;
-            const updated = await ProfessorService.updateMany(query, body);
+            await ProfessorService.updateMany(query, body);
+            ctx.status = 204;
         } catch (err) {
             onError(ctx, err);
         }
@@ -61,8 +63,12 @@ class Controler {
     async delete(ctx) {
         try {
             const { id } = ctx.params;
-            const deleted = await ProfessorService.deleteOne(ObjectId(id));
+            const professor = await ProfessorService.getById(id);
+            await UserService.deleteOne(professor.user);
+            await ProfessorService.deleteOne(ObjectId(id));
+            ctx.status = 204;
         } catch (err) {
+            console.log(err)
             onError(ctx, err);
         }
     }
