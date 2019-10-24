@@ -2,12 +2,20 @@ const { Subject } = require('../models/subject.model');
 
 
 class Service {
-  findOne(id, projection, options) {
+  getById(id, projection, options, populate) {
+    if (populate) {
+      return Subject.findOne({ _id: id }, projection, options)
+        .populate('course');
+    }
     return Subject.findOne({ _id: id }, projection, options);
   }
 
-  find(conditons, projection, options) {
-    return Subject.find(conditons, projection, options)
+  find(conditons, projection, options, populate) {
+    if (populate) {
+      return Subject.find(conditons, projection, options)
+        .populate('course');
+    }
+    return Subject.find(conditons, projection, options);
   }
 
   create(subject) {

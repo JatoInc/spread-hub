@@ -15,7 +15,13 @@ class Controler {
                 query.course.$in = ctx.query.course.split(',');
             }
 
-            const result = await SubjectService.find(query);
+            if (ctx.query._fields) {
+                ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
+            }
+
+            const populate = ctx.query._full && ctx.query._full == 'true';
+
+            const result = await SubjectService.find(query, ctx.query._fields, {}, populate);
             onSuccess(ctx, result);
         } catch (err) {
             console.log(err);
@@ -26,7 +32,17 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            const result = await SubjectService.findOne(ObjectID(id));
+            
+            if (ctx.query._fields) {
+                ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
+            }
+
+            if (ctx.query._fields) {
+                ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
+            }
+
+            const populate = ctx.query._full && ctx.query._full == 'true';
+            const result = await SubjectService.getById(ObjectID(id), ctx.query._fields, {}, populate);
             onSuccess(ctx, result);
         } catch (err) {
             onError(ctx, err);
