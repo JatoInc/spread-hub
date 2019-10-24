@@ -3,7 +3,8 @@ FROM mhart/alpine-node:10
 ENV PORT 4000
 ENV WDIR /process
 ENV BASE_API="v1"
-ENV DATABASE=""
+ENV MONGO_PORTAL="mongodb+srv://jatoInc:J470C45U4L@cluster-spread-g7uyz.azure.mongodb.net/test?retryWrites=true&w=majority"
+ENV JWT_SECRET="YC@sc835aSF&M3Zx#"
 
 RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
