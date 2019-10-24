@@ -4,7 +4,8 @@ const mongooseDelete = require('mongoose-delete');
 
 const schema = new mongoose.Schema({
     name: { type: String, required: true }
-});
+}, { versionKey: false, 
+    timestamps: true });
 
 schema.plugin(mongooseDelete, { overrideMethods: true });
 
