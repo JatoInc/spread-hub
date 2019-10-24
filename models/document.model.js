@@ -9,7 +9,8 @@ const schema = new mongoose.Schema({
     createdBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     approvedBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     subject: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Subject' }
-});
+}, { versionKey: false, 
+    timestamps: true });
 
 schema.plugin(mongooseDelete, { overrideMethods: true });
 
