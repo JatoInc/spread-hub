@@ -5,7 +5,8 @@ const mongooseDelete = require('mongoose-delete');
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
     course: [{ type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Course' }]
-});
+}, { versionKey: false, 
+    timestamps: true });
 
 schema.plugin(mongooseDelete, { overrideMethods: true });
 
