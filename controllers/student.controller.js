@@ -12,8 +12,14 @@ class Controler {
                 ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
             }
 
-            const result = await StudentService.find({}, ctx.query._fields, {}, ctx.query._full);
-            onSuccess(ctx, result);
+            const populate = ctx.query._full && ctx.query._full == 'true';
+
+            const students = await StudentService.find({}, ctx.query._fields, {}, populate);
+            students.forEach(student => {
+                // student.user.password = null
+                student.user.password = null
+            });
+            onSuccess(ctx, students);
         } catch (err) {
             console.log(err);
             onError(ctx, err);
@@ -23,9 +29,14 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            const result = await StudentService.findOne(ObjectID(id), ctx.query._fields, {}, ctx.query._full);
-            onSuccess(ctx, result);
+            const populate = ctx.query._full && ctx.query._full == 'true';
+            const student = await StudentService.getById(ObjectID(id), ctx.query._fields, {}, populate);
+            if (student) {
+                student.user.password = null
+            }
+            onSuccess(ctx, student);
         } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }
@@ -61,9 +72,25 @@ class Controler {
     async updateOne(ctx) {
         try {
             const { id } = ctx.params;
-            const { body } = ctx;
-            const updated = await StudentService.updateOne(ObjectID(id), body);
-            return onSuccess(ctx, updated);
+
+            const userPayload = {
+                name: ctx.request.body.name,
+                email: ctx.request.body.email,
+                address: ctx.request.body.address,
+                password: bcrypt.hashSync(ctx.request.body.password, 10),
+                phone: ctx.request.body.phone,
+                access_level: 3
+            }
+
+            const studentPayload = {
+                user: createdUser._id,
+                register: ctx.request.body.register,
+                course: ObjectID(ctx.request.body.course)
+            }
+
+            await UserService.create(userPayload);
+            await StudentService.updateOne(ObjectID(id), studentPayload);
+            ctx.status = 204;
         } catch (err) {
             onError(ctx, err);
         }
@@ -97,16 +124,6 @@ class Controler {
         try {
             const { user_id } = ctx.params;
             await StudentService.updateOne(ObjectID(user_id), { access_level: 2 });
-            return onSuccess(ctx, {});
-        } catch (err) {
-            onError(ctx, err);
-        }
-    }
-
-    async deleteCurator(ctx) {
-        try {
-            const { user_id } = ctx.params;
-            await StudentService.updateOne(ObjectID(user_id), { access_level: 3 });
             return onSuccess(ctx, {});
         } catch (err) {
             onError(ctx, err);
