@@ -23,7 +23,7 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            const result = await StudentService.findOne(ObjectID(id));
+            const result = await StudentService.findOne(ObjectID(id), ctx.query._fields, {}, ctx.query._full);
             onSuccess(ctx, result);
         } catch (err) {
             onError(ctx, err);

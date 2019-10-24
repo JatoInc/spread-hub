@@ -2,16 +2,18 @@ const { Student } = require('../models/student.model');
 
 
 class Service {
-  async findOne(id, projection, options) {
-    return Student.findOne({ _id: id }, projection, options);
+  async findOne(id, projection, options, populate) {
+    if (populate) {
+      return Student.findOne({ _id: id }, projection, options)
+        .populate(['user', 'course', 'responsible']);
+    }
+    return Student.findOne({ _id: id }, projection, options)
   }
 
   async find(conditons, projection, options, populate = false) {
     if (populate) {
       return Student.find(conditons, projection, options)
-        .populate('user')
-        .populate('course')
-        .populate('responsible')
+        .populate(['user', 'course', 'responsible']);
     }
     return Student.find(conditons, projection, options);
   }
