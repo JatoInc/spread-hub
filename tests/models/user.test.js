@@ -1,5 +1,6 @@
 require('dotenv').config();
 const Database = require('../../shared/spread-hub-context');
+// const UserService = require('../../services/users.service')
 const bcrypt = require('bcrypt');
 
 (async () => {
@@ -13,7 +14,7 @@ const bcrypt = require('bcrypt');
         access_level: 1
     }
     
-    const created = await User.create(user);
+    const created = await User.find();
     console.log(created);
 
 })()
