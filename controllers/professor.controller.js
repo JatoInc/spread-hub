@@ -62,16 +62,19 @@ class Controler {
     async updateOne(ctx) {
         try {
             const { id } = ctx.params;
-
             const { body } = ctx.request;
+            
+            const professor = await ProfessorService.getById(ObjectId(id));
+            
+            const user = { ...body.user };
+            
+            delete body.user;
 
-            if (body.subject) {
-                body.subject = body.subject.map(s => s = ObjectId(s));
-            }
-
-            await ProfessorService.updateOne(ObjectId(id), ctx.request.body);
+            await UserService.updateOne(ObjectId(professor.user._id), user);
+            await ProfessorService.updateOne(ObjectId(id), body);
             ctx.status = 204;
         } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }
