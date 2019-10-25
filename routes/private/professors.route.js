@@ -9,7 +9,6 @@ route.prefix(`/api/${process.env.BASE_API}/professors`);
 route.get('/', controler.list);
 route.get('/:id', controler.getById);
 route.post('/', controler.create);
-route.put('/', controler.updateMany);
 route.put('/:id', controler.updateOne);
 route.delete('/:id', controler.delete);
 

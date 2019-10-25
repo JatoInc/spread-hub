@@ -49,7 +49,7 @@ class Controler {
             user.password = bcrypt.hashSync(user.password, 10);
 
             const createdUser = await UserService.create({ ...user, access_level: 1 });
-            
+
             body.subject = body.subject.map(s => s = ObjectId(s));
             const created = await ProfessorService.create({ ...body, user: createdUser._id });
             onCreated(ctx, created);
@@ -62,6 +62,13 @@ class Controler {
     async updateOne(ctx) {
         try {
             const { id } = ctx.params;
+
+            const { body } = ctx.request;
+
+            if (body.subject) {
+                body.subject = body.subject.map(s => s = ObjectId(s));
+            }
+
             await ProfessorService.updateOne(ObjectId(id), ctx.request.body);
             ctx.status = 204;
         } catch (err) {

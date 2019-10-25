@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 (async () => {
     await Database.connect();
     const { Professor } = require('../../models/professor.model');
+    require('../../models/subject.model');
     require('../../models/user.model');
 
     // const payload = {
@@ -14,7 +15,7 @@ const { ObjectId } = require('mongodb');
     // }
 
     // const res = await Professor.create(payload);
-    const res = await Professor.find().populate('user');
-    console.log(res);
+    const res = await Professor.find().populate(['user', 'subject']);
+    console.log(JSON.stringify(res, null, 4));
 
 })()

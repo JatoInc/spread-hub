@@ -17,10 +17,35 @@ class Service {
     return Student.findOne({ _id: id }, projection, options)
   }
 
-  // getByAccessLevel(level, projection, options) {
-  //   return Student.findOne({ _id: id }, projection, options)
-  //       .populate([{'user', }, 'course', 'responsible']);
-  // }
+  getByAccessLevel(level, id) {
+    const pipeline = [
+      {
+        "$lookup": {
+          "from": "users",
+          "localField": "user",
+          "foreignField": "_id",
+          "as": "user"
+        }
+      },
+      {
+        "$unwind": {
+          "path": "$user",
+          "preserveNullAndEmptyArrays": false
+        }
+      },
+      {
+        "$match": {
+          "user.access_level": level
+        }
+      }
+    ];
+
+    // if (id) {
+    //   pipeline[2].$match._id = id;
+    //   return Student.aggregate(pipeline);
+    // }
+    return Student.aggregate(pipeline);
+  }
 
   async find(conditons, projection, options, populate = false) {
     if (populate) {

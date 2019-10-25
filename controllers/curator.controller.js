@@ -11,8 +11,9 @@ class Controler {
             if (ctx.query._fields) {
                 ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
             }
-            const populate = ctx.query._full && ctx.query._full == 'true';
-            const result = await StudentService.find({ access_level: 2 }, ctx.query._fields, {}, populate);
+
+            // const populate = ctx.query._full && ctx.query._full == 'true';
+            const result = await StudentService.getByAccessLevel(2);
             onSuccess(ctx, result);
         } catch (err) {
             console.log(err);
@@ -23,8 +24,8 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            const populate = ctx.query._full && ctx.query._full == 'true';
-            const result = await StudentService.getById(ObjectID(id), ctx.query._fields, {}, populate);
+            // const populate = ctx.query._full && ctx.query._full == 'true';
+            const result = await StudentService.getById(2, ObjectID(id));
             onSuccess(ctx, result);
         } catch (err) {
             console.log(err);

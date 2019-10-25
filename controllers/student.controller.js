@@ -64,7 +64,6 @@ class Controler {
             onCreated(ctx, created);
         } catch (err) {
             console.log(err);
-
             onError(ctx, err);
         }
     }

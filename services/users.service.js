@@ -20,7 +20,7 @@ class Service {
   }
 
   deleteOne(id) {
-    return User.deleteOne({ _id: id })
+    return User.delete({ _id: id });
   }
 
   updateOne(id, properties) {
