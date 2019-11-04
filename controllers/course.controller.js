@@ -7,7 +7,7 @@ class Controler {
         try {
             const query = {};
 
-            if(ctx.query.name){
+            if (ctx.query.name) {
                 query.name = ctx.query.name
             }
 

@@ -1,6 +1,6 @@
 const { onSuccess, onError, onCreated } = require('../shared/helpers/finalize-request/index')
 const SubjectService = require('../services/subject.service');
-const { ObjectID } = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 class Controler {
     async list(ctx) {
@@ -32,7 +32,7 @@ class Controler {
     async getById(ctx) {
         try {
             const { id } = ctx.params;
-            
+
             if (ctx.query._fields) {
                 ctx.query._fields = ctx.query._fields.replace(/,/g, ' ');
             }
@@ -42,9 +42,28 @@ class Controler {
             }
 
             const populate = ctx.query._full && ctx.query._full == 'true';
-            const result = await SubjectService.getById(ObjectID(id), ctx.query._fields, {}, populate);
+            const result = await SubjectService.getById(ObjectId(id), ctx.query._fields, {}, populate);
             onSuccess(ctx, result);
         } catch (err) {
+            onError(ctx, err);
+        }
+    }
+
+    async getSubjectsFromCourse(ctx) {
+        try {
+            const { id } = ctx.params;
+            // if (!ctx.query.subjects) {
+            //     throw 'Subjects is required query param!';
+            // }
+            const query = {
+                course: {
+                    $in: [ObjectId(id)]
+                }
+            }
+            const subjects = await SubjectService.find(query);
+            return onSuccess(ctx, subjects)
+        } catch (err) {
+            console.log(err);
             onError(ctx, err);
         }
     }
@@ -52,7 +71,7 @@ class Controler {
     async create(ctx) {
         try {
             let { body } = ctx.request
-            body.course = body.course.map(c => ObjectID(c));
+            body.course = body.course.map(c => ObjectId(c));
 
             const created = await SubjectService.create(body);
             onCreated(ctx, created);
@@ -69,9 +88,9 @@ class Controler {
             let { body } = ctx.request;
 
             if (body.course) {
-                body.course = body.course.map(c => ObjectID(c));
+                body.course = body.course.map(c => ObjectId(c));
             }
-            const updated = await SubjectService.updateOne(ObjectID(id), body);
+            const updated = await SubjectService.updateOne(ObjectId(id), body);
             return onSuccess(ctx, updated);
         } catch (err) {
             onError(ctx, err);
@@ -92,7 +111,7 @@ class Controler {
     async delete(ctx) {
         try {
             const { id } = ctx.params;
-            const deleted = await SubjectService.deleteOne(ObjectID(id));
+            const deleted = await SubjectService.deleteOne(ObjectId(id));
         } catch (err) {
             onError(ctx, err);
         }
