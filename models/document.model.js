@@ -4,13 +4,16 @@ const mongooseDelete = require('mongoose-delete');
 
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
-    approvedAt: { type: Date },
+    uploadedAt: { type: Date, required: true },
+    approvedAt: Date,
     filePath: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
-    approvedBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     subject: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Subject' }
-}, { versionKey: false, 
-    timestamps: true });
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
 schema.plugin(mongooseDelete, { overrideMethods: true });
 

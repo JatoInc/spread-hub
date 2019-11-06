@@ -7,20 +7,26 @@ const { onSuccess } = require('../shared/helpers/finalize-request/index');
 
 class Controller {
     async login(ctx) {
-        const credentials = ctx.headers.authorization.replace('Basic ', '')
-
-        const userAuth = Buffer.from(credentials, 'base64').toString('utf-8');
+        const credentials = ctx.headers.authorization;
+        const userAuth = Buffer.from(credentials, 'base64').toString('utf-8').replace('Basic ', '');
         const [email, password] = userAuth.split(':');
+        console.log({ email, password });
 
         const user = await UserService.findOne({ email });
         if (!user || user.length == 0) {
-            throw 'Email not found';
+            throw {
+                error: true, 
+                message: 'Email not found'
+            };
         }
 
         const authenticated = bcrypt.compareSync(password, user.password);
 
         if (!authenticated) {
-            throw 'Inavlid password'
+            throw {
+                error: true,
+                message: 'Inavlid password'
+            }
         }
 
         const token = jwt.sign({

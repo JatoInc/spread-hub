@@ -10,11 +10,19 @@ const bcrypt = require('bcrypt');
     const user = {
         name: 'Christian',
         email: 'christianmouraa@gmail.com',
-        password: bcrypt.hashSync('asdsaih3434', 10),
-        access_level: 1
+        password: bcrypt.hashSync('teste@123', 10),
+        access_level: 1,
+        phone: '13999999999',
+        address: {
+            street: 'Rua dos teste',
+            number: '123',
+            complement: 'teste',
+            city: 'Cidade dos testes',
+            state: 'Estado teste',
+            uf: 'TT'
+        }
     }
-    
-    const created = await User.find();
-    console.log(created);
 
+    const created = await User.create(user);
+    console.log(created);
 })()

@@ -3,6 +3,7 @@ const path = require('path');
 const storage = require('azure-storage');
 
 const blobService = storage.createBlobService();
+const { ObjectId } = require('mongodb');
 class Service {
   findOne(conditions = {}, projection, options) {
     return Document.findOne(conditions, projection, options);
@@ -12,13 +13,12 @@ class Service {
     return Document.find(conditons, projection, options);
   }
 
-  async create(document) {
-    // const content = new Buffer(document.content).toString('base64');
-    // delete document.content;
-    // const created = await Document.create(document);
+  async create(document, user, subject) {
+    const timestamp = Date.now();
+    const blobName = `${document.name}_${timestamp}`
 
-    const uploaded = await new Promise((resolve, reject) => {
-      blobService.createBlockBlobFromLocalFile(process.env.BLOBS_CONTAINER, document.name, document.path, (err, res) => {
+    const uploadResult = await new Promise((resolve, reject) => {
+      blobService.createBlockBlobFromLocalFile(process.env.BLOBS_CONTAINER, blobName, document.path, (err, res) => {
         if (err) {
           reject(err);
         } else {
@@ -26,8 +26,17 @@ class Service {
         }
       });
     });
-    // return { ...created, ...uploaded }
-    return uploaded
+
+    const documentPayload = {
+      name: document.name,
+      uploadResultAt: new Date(timestamp),
+      filePath: `${proccess.env.BLOBS_RESOURCE_BASE_URL}/${uploadResult.container}/${uploadResult.name}`,
+      user: ObjectId(user),
+      subject: ObjectId(subject)
+    }
+
+    const created = await Document.create(documentPayload);
+    return { ...created, ...uploadResult }
   }
 
   deleteOne(id) {
