@@ -14,7 +14,7 @@ class Service {
 
   async create(document, user, subject) {
     const timestamp = Date.now();
-    const blobName = `${document.name}_${timestamp}`
+    const blobName = `${timestamp}_${document.name}`
 
     const uploadResult = await new Promise((resolve, reject) => {
       blobService.createBlockBlobFromLocalFile(process.env.BLOBS_CONTAINER, blobName, document.path, (err, res) => {
