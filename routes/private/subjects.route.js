@@ -6,11 +6,10 @@ const route = new Router();
 
 route.prefix(`/api/${process.env.BASE_API}/subjects`);
 
-route.get('/', controller.list);
-route.get('/:id', controller.getById);
-route.get('/courses/:id', controller.getSubjectsFromCourse);
-route.post('/', controller.create);
-route.put('/', controller.updateMany);
-route.put('/:id', controller.updateOne);
+route.get('/', auth.atLeastStudent, controller.list);
+route.get('/:id', auth.atLeastAdmin, controller.getById);
+// route.get('/courses/:id', controller.getSubjectsFromCourse);
+route.post('/', auth.atLeastAdmin, controller.create);
+route.put('/:id', auth.atLeastAdmin, controller.updateOne);
 
 module.exports = route;

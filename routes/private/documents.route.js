@@ -7,8 +7,8 @@ const route = new Router();
 route.prefix(`/api/${process.env.BASE_API}/documents`);
 
 // route.get('/', controller.list);
-route.get('/', controller.list);
-route.post('/', controller.upload);
+route.get('/', auth.atLeastStudent, controller.list);
+route.post('/', auth.atLeastStudent, controller.upload);
 // route.put('/', controller.updateMany);
 // route.put('/:id', controller.updateOne);
 

@@ -6,10 +6,9 @@ const route = new Router();
 
 route.prefix(`/api/${process.env.BASE_API}/courses`);
 
-route.get('/', controller.list);
-route.get('/:id', controller.getById);
-route.post('/', controller.create);
-route.put('/', controller.updateMany);
-route.put('/:id', controller.updateOne);
+route.get('/', auth.atLeastAdmin, controller.list);
+route.get('/:id', auth.atLeastAdmin, controller.getById);
+route.post('/', auth.atLeastAdmin, controller.create);
+route.put('/:id', auth.atLeastAdmin, controller.updateOne);
 
 module.exports = route;

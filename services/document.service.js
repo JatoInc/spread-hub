@@ -1,6 +1,6 @@
 const { Document } = require('../models/document.model');
 const storage = require('azure-storage');
-
+const getFileType = require('../shared/helpers/getFileType');
 const blobService = storage.createBlobService();
 const { ObjectId } = require('mongodb');
 class Service {
@@ -15,9 +15,10 @@ class Service {
   async create(document, user, subject) {
     const timestamp = Date.now();
     const blobName = `${timestamp}_${document.name}`
-
+    const type = getFileType(blobName);
+    console.log('type :', type);
     const uploadResult = await new Promise((resolve, reject) => {
-      blobService.createBlockBlobFromLocalFile(process.env.BLOBS_CONTAINER, blobName, document.path, (err, res) => {
+      blobService.createBlockBlobFromLocalFile(process.env.BLOBS_CONTAINER, blobName, document.path, { contentType: type }, (err, res) => {
         if (err) {
           reject(err);
         } else {
