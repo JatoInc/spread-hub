@@ -1,5 +1,4 @@
 const { Document } = require('../models/document.model');
-const path = require('path');
 const storage = require('azure-storage');
 
 const blobService = storage.createBlobService();
@@ -29,10 +28,11 @@ class Service {
 
     const documentPayload = {
       name: document.name,
-      uploadResultAt: new Date(timestamp),
-      filePath: `${proccess.env.BLOBS_RESOURCE_BASE_URL}/${uploadResult.container}/${uploadResult.name}`,
-      user: ObjectId(user),
-      subject: ObjectId(subject)
+      uploadedBy: ObjectId(user),
+      uploadedAt: new Date(timestamp),
+      filePath: `${process.env.BLOBS_RESOURCE_BASE_URL}/${uploadResult.container}/${uploadResult.name}`,
+      subject: ObjectId(subject),
+      isApproved: false
     }
 
     const created = await Document.create(documentPayload);

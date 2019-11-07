@@ -9,7 +9,8 @@ const schema = new mongoose.Schema({
     filePath: { type: String, required: true },
     uploadedBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    subject: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Subject' }
+    subject: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Subject' },
+    isApproved: { type: Boolean, required: true }
 }, {
     versionKey: false,
     timestamps: true
