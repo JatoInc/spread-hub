@@ -17,6 +17,6 @@ module.exports = (queryString) => {
 
         }
 
-        if(operation)
+        if(operation) {}
     })
 }   
