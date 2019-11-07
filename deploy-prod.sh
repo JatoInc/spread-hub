@@ -1,5 +1,5 @@
 #!/bin/bash
-docker service rm spread_hub
+docker service rm jatocorp_spread_hub
 docker rmi -f spread-hub:latest
 
 docker build --no-cache -t spread-hub:latest -f Dockerfile .
