@@ -8,10 +8,8 @@ const { onSuccess } = require('../shared/helpers/finalize-request/index');
 class Controller {
     async login(ctx) {
         const credentials = ctx.headers.authorization;
-        const userAuth = Buffer.from(credentials, 'base64').toString('utf-8').replace('Basic ', '');
+        const userAuth = Buffer.from(credentials.replace('Basic ', ''), 'base64').toString('utf-8');
         const [email, password] = userAuth.split(':');
-        console.log({ email, password });
-
         const user = await UserService.findOne({ email });
         if (!user || user.length == 0) {
             throw {
